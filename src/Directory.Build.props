@@ -1,0 +1,6 @@
+﻿<Project>
+    <PropertyGroup>
+        <Version>1.1.0</Version>
+        <Product>FanControl.LianLiPlugin</Product>
+    </PropertyGroup>
+</Project>

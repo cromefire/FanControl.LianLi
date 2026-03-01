@@ -1,0 +1,10 @@
+﻿<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish FanControl.LianLiPlugin.ARGB to folder" type="DotNetFolderPublish" factoryName="Publish to folder">
+    <riderPublish configuration="Release" delete_existing_files="true" platform="Any CPU" target_folder="$PROJECT_DIR$/FanControl.LianLiPlugin.ARGB/bin/Release/net10.0/publish" target_framework="net10.0" uuid_high="28804987990837356" uuid_low="6378444102731990611">
+      <runtimes>
+        <item value="Portable" />
+      </runtimes>
+    </riderPublish>
+    <method v="2" />
+  </configuration>
+</component>

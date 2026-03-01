@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <RootNamespace>FanControl.LianLiPlugin.Base</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FanControl.Plugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\dlls\FanControl.Plugins.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="HidSharp\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HidSharp.Custom\HidSharp.Custom.csproj" />
+  </ItemGroup>
+</Project>

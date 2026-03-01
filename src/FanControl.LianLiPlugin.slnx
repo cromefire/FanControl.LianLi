@@ -1,0 +1,10 @@
+﻿<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="FanControl.LianLiPlugin.ARGB/FanControl.LianLiPlugin.ARGB.csproj" />
+  <Project Path="FanControl.LianLiPlugin.Base/FanControl.LianLiPlugin.Base.csproj" />
+  <Project Path="FanControl.LianLiPlugin/FanControl.LianLiPlugin.csproj" />
+  <Project Path="HidSharp.Custom/HidSharp.Custom.csproj" />
+</Solution>

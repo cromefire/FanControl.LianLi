@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <RootNamespace>FanControl.LianLiPlugin</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <Reference Include="FanControl.Plugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+            <SpecificVersion>False</SpecificVersion>
+            <HintPath>..\dlls\FanControl.Plugins.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\FanControl.LianLiPlugin.Base\FanControl.LianLiPlugin.Base.csproj" />
+    </ItemGroup>
+</Project>
