@@ -2,6 +2,8 @@
 
 An unofficial LianLi plugin for [FanControl](https://github.com/Rem0o/FanControl.Releases).
 
+This is a fork which makes this plugin compatible with the .NET (non-Framework, thanks Microsoft) release of FanControl.
+
 [![Support](https://img.shields.io/badge/Support-Buy_Me_A_Coffee-yellow?style=for-the-badge&logo=buy%20me%20a%20coffee&color=FFDD00)](https://www.buymeacoffee.com/CameronHalter)
 
 ## Device Support
