@@ -25,7 +25,7 @@ public class ControlSensors : IPluginControlSensor2
 
     public void Set(float val)
     {
-        if (_val == null || Math.Abs(_val.Value - val) <= 0.0001)
+        if (_val == null || !(Math.Abs(_val.Value - val) <= 0.0001))
         {
             _devices.FanControllers_SetSpeed(_controllerIndex, _channelIndex, (int)val);
             _val = val;
