@@ -1,27 +1,27 @@
-namespace LianLi;
+using HidSharp;
 
-internal class HID
+namespace FanControl.LianLiPlugin.Base.LianLi;
+
+internal class Hid
 {
 
-    public static List<HIDDevice> Locate(int[] VENDOR_IDS, int[] PRODUCT_IDS)
+    public static List<HidDevice> Locate(int[] vendorIds, int[] productIds)
     {
 
-        var devices = new List<HIDDevice>();
-        var locatedDevices = HidSharp.DeviceList.Local.GetHidDevices().ToArray();
+        var devices = new List<HidDevice>();
+        var locatedDevices = DeviceList.Local.GetHidDevices().ToArray();
 
         foreach (HidSharp.HidDevice device in locatedDevices)
         {
 
-            var _vid = 0;
-            var _pid = 0;
-            int.TryParse(GetIdentifierPart("vid_", device.DevicePath), System.Globalization.NumberStyles.HexNumber, null, out _vid);
-            int.TryParse(GetIdentifierPart("pid_", device.DevicePath), System.Globalization.NumberStyles.HexNumber, null, out _pid);
+            int vid;
+            int pid;
+            int.TryParse(GetIdentifierPart("vid_", device.DevicePath), System.Globalization.NumberStyles.HexNumber, null, out vid);
+            int.TryParse(GetIdentifierPart("pid_", device.DevicePath), System.Globalization.NumberStyles.HexNumber, null, out pid);
 
-            if (Enumerable.Contains(VENDOR_IDS, _vid) && Enumerable.Contains(PRODUCT_IDS, _pid))
+            if (Enumerable.Contains(vendorIds, vid) && Enumerable.Contains(productIds, pid))
             {
-                devices.Add(new HIDDevice(
-                    _vid,
-                    _pid,
+                devices.Add(new HidDevice(pid,
                     device
                 ));
             }
@@ -31,32 +31,27 @@ internal class HID
 
     }
 
-    private static string GetIdentifierPart(string identifier, string DeviceId)
+    private static string GetIdentifierPart(string identifier, string deviceId)
     {
-        var vidIndex = DeviceId.IndexOf(identifier, StringComparison.Ordinal);
-        var startingAtVid = DeviceId.Substring(vidIndex + 4);
+        var vidIndex = deviceId.IndexOf(identifier, StringComparison.Ordinal);
+        var startingAtVid = deviceId.Substring(vidIndex + 4);
         return startingAtVid.Substring(0, 4);
     }
 
 }
 
-internal class HIDDevice
+internal class HidDevice
 {
-    public int _pid;
-    public int _vid;
-    private HidSharp.HidDevice _device;
-    private HidSharp.HidStream _stream;
-    private HidSharp.Reports.ReportDescriptor _reportDescriptor;
+    public int Pid;
+    private readonly HidStream _stream;
 
-    public HIDDevice(int VID, int PID, HidSharp.HidDevice Device)
+    public HidDevice(int pid, HidSharp.HidDevice device)
     {
-        _vid = VID;
-        _pid = PID;            
-        _device = Device;
+        Pid = pid;
 
-        if(_device.TryOpen(out _stream))
+        if(device.TryOpen(out _stream))
         {
-            _reportDescriptor = _device.GetReportDescriptor();
+            device.GetReportDescriptor();
         }
     }
 

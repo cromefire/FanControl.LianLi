@@ -1,26 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace LianLi;
+namespace FanControl.LianLiPlugin.Base.LianLi;
 
 public class Devices
 {
+    private static readonly int[] VENDOR_IDS = { 0x0cf2 };
+    private static readonly int[] PRODUCT_IDS = { 0x7750, 0xa100, 0xa101, 0xa102, 0xa103, 0xa104, 0xa105 };
+    
+    private List<FanController> _fancontrollers = [];
 
-    private List<FanController> _fancontrollers = new List<FanController> { };
-
-    public Devices(bool enableARGB)
+    public Devices(bool enableArgb)
     {
-
         // Scan for controllers
-        int[] VENDOR_IDS = { 0x0cf2 };
-        int[] PRODUCT_IDS = { 0x7750, 0xa100, 0xa101, 0xa102, 0xa103, 0xa104, 0xa105 };
 
-        var Devices = HID.Locate(VENDOR_IDS, PRODUCT_IDS);
+        var devices = Hid.Locate(VENDOR_IDS, PRODUCT_IDS);
 
-        foreach (var device in Devices)
+        foreach (var device in devices)
         {
-            _fancontrollers.Add(new FanController(device, enableARGB));
+            _fancontrollers.Add(new FanController(device, enableArgb));
         }
 
     }
@@ -28,16 +23,15 @@ public class Devices
     // Dispose Fan Controllers
     public void Dispose()
     {
-        for (int i = 0; i < _fancontrollers.Count(); i++)
+        foreach (var t in _fancontrollers)
         {
-            _fancontrollers[i].Dispose();
+            t.Dispose();
         }
     }
 
     public bool FanControllers_Located()
     {
-        if (_fancontrollers.Count == 0) { return false; }
-        return true;
+        return _fancontrollers.Count != 0;
     }
 
     public int FanControllers_Count()
@@ -45,14 +39,14 @@ public class Devices
         return _fancontrollers.Count;
     }
 
-    public float FanControllers_GetSpeed(int fancontroller_index, int fancontroller_channel)
+    public float FanControllers_GetSpeed(int fancontrollerIndex, int fancontrollerChannel)
     {
-        return _fancontrollers[fancontroller_index].GetSpeed(fancontroller_channel);
+        return _fancontrollers[fancontrollerIndex].GetSpeed(fancontrollerChannel);
     }
 
-    public void FanControllers_SetSpeed(int fancontroller_index, int fancontroller_channel, int speed)
+    public void FanControllers_SetSpeed(int fancontrollerIndex, int fancontrollerChannel, int speed)
     {
-        _fancontrollers[fancontroller_index].SetSpeed(fancontroller_channel, speed);
+        _fancontrollers[fancontrollerIndex].SetSpeed(fancontrollerChannel, speed);
     }
 
 }
@@ -69,14 +63,13 @@ internal class FanController
         Unknown
     }
 
-    private Type _type;
-    private HIDDevice _device;
-    public float _speed;
+    private readonly Type _type;
+    private readonly HidDevice _device;
 
-    public FanController(HIDDevice device, bool enableARGB)
+    public FanController(HidDevice device, bool enableArgb)
     {
         _device = device;
-        switch (device._pid)
+        switch (device.Pid)
         {
             case 0xa100:
             case 0x7750:
@@ -100,12 +93,12 @@ internal class FanController
                 break;
         }
 
-        if (enableARGB) { SetARGB(); }
-        for (int i = 0; i < 4; i++) { DisableRPMSync(i); }
+        if (enableArgb) { SetArgb(); }
+        for (var i = 0; i < 4; i++) { DisableRpmSync(i); }
     }
 
 
-    public void SetSpeed(int fancontroller_channel, int speed)
+    public void SetSpeed(int fancontrollerChannel, int speed)
     {
         byte speedByte;
 
@@ -115,15 +108,15 @@ internal class FanController
         }
         else
         {
-            var speed_200_2100 = (byte)((speed));
+            var speed_200_2100 = (byte)speed;
             speedByte = speed_200_2100;
         }
 
         // Send the command with the calculated speedByte
-        _device.Write(new byte[] { 224, (byte)(32 + fancontroller_channel), 0, speedByte });
+        _device.Write([224, (byte)(32 + fancontrollerChannel), 0, speedByte]);
     }
 
-    public float GetSpeed(int fancontroller_channel)
+    public float GetSpeed(int fancontrollerChannel)
     {
 
         int offset = 1;
@@ -153,7 +146,7 @@ internal class FanController
                 break;
         }
 
-        return (float)BitConverter.ToUInt16(buffer.Skip(offset + fancontroller_channel * 2).Take(2).Reverse().ToArray(), 0);
+        return BitConverter.ToUInt16(buffer.Skip(offset + fancontrollerChannel * 2).Take(2).Reverse().ToArray(), 0);
     }
 
     public void Dispose()
@@ -161,49 +154,45 @@ internal class FanController
         _device.Dispose();
     }
 
-    private void DisableRPMSync(int fancontroller_channel)
+    private void DisableRpmSync(int fancontrollerChannel)
     {
-        byte channelByte = (byte)((2 * fancontroller_channel) * 16);
-        if (fancontroller_channel == 0) { channelByte = (byte)(16); }
+        var channelByte = (byte)(2 * fancontrollerChannel * 16);
+        if (fancontrollerChannel == 0) { channelByte = 16; }
 
         switch (_type)
         {
             case Type.SL:
-                _device.Write(new byte[] { 224, 16, 49, channelByte });
+                _device.Write([224, 16, 49, channelByte]);
                 break;
             case Type.SLV2:
-                _device.Write(new byte[] { 224, 16, 98, channelByte });
+                _device.Write([224, 16, 98, channelByte]);
                 break;
             case Type.AL:
-                _device.Write(new byte[] { 224, 16, 66, channelByte });
+                _device.Write([224, 16, 66, channelByte]);
                 break;
             case Type.ALV2:
-                _device.Write(new byte[] { 224, 16, 98, channelByte });
-                break;
             case Type.SLI:
-                _device.Write(new byte[] { 224, 16, 98, channelByte });
+                _device.Write([224, 16, 98, channelByte]);
                 break;
         }
     }
 
-    private void SetARGB()
+    private void SetArgb()
     {
         switch (_type)
         {
             case Type.SL:
-                _device.Write(new byte[] { 224, 16, 48, 1, 0, 0, 0 });
+                _device.Write([224, 16, 48, 1, 0, 0, 0]);
                 break;
             case Type.SLV2:
-                _device.Write(new byte[] { 224, 16, 97, 1, 0, 0, 0 });
+                _device.Write([224, 16, 97, 1, 0, 0, 0]);
                 break;
             case Type.AL:
-                _device.Write(new byte[] { 224, 16, 65, 1, 0, 0, 0 });
+                _device.Write([224, 16, 65, 1, 0, 0, 0]);
                 break;
             case Type.ALV2:
-                _device.Write(new byte[] { 224, 16, 97, 1, 0, 0, 0 });
-                break;
             case Type.SLI:
-                _device.Write(new byte[] { 224, 16, 97, 1, 0, 0, 0 });
+                _device.Write([224, 16, 97, 1, 0, 0, 0]);
                 break;
         }
     }
