@@ -35,8 +35,14 @@ jobs:
           cp FanControl.LianLiPlugin.ARGB/bin/Release/net10.0/publish/* build/ARGB
         shell: bash
 
-      - name: Upload artifact
+      - name: Upload normal artifact
         uses: actions/upload-artifact@v4
         with:
           name: FanControl.LianLiPlugin
-          path: build/
+          path: build/Normal/
+          
+      - name: Upload ARGB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FanControl.LianLiPlugin.ARGB
+          path: build/ARGB/
