@@ -1,8 +1,0 @@
-is_global = true
-build_property.RootNamespace = HidSharp
-build_property.ProjectDir = C:\Users\Tim\RiderProjects\FanControl.LianLi\src\HidSharp.Custom\
-build_property.EnableComHosting = 
-build_property.EnableGeneratedComInterfaceComImportInterop = 
-build_property.CsWinRTUseWindowsUIXamlProjections = false
-build_property.EffectiveAnalysisLevelStyle = 
-build_property.EnableCodeStyleSeverity = 
