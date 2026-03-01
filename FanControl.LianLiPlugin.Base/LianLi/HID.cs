@@ -1,4 +1,4 @@
-﻿namespace LianLi;
+namespace LianLi;
 
 internal class HID
 {
@@ -17,7 +17,7 @@ internal class HID
             int.TryParse(GetIdentifierPart("vid_", device.DevicePath), System.Globalization.NumberStyles.HexNumber, null, out _vid);
             int.TryParse(GetIdentifierPart("pid_", device.DevicePath), System.Globalization.NumberStyles.HexNumber, null, out _pid);
 
-            if (VENDOR_IDS.Contains(_vid) && PRODUCT_IDS.Contains(_pid))
+            if (Enumerable.Contains(VENDOR_IDS, _vid) && Enumerable.Contains(PRODUCT_IDS, _pid))
             {
                 devices.Add(new HIDDevice(
                     _vid,

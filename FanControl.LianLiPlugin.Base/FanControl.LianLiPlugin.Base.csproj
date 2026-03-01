@@ -13,9 +13,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="HidSharp\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\HidSharp.Custom\HidSharp.Custom.csproj" />
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-﻿using FanControl.LianLiPlugin.Base;
+using FanControl.LianLiPlugin.Base;
 using FanControl.Plugins;
 
 namespace FanControl.LianLiPlugin;
